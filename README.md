@@ -46,10 +46,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Environment setup:
+### Environment setup (`.env` file):
+
+Add your own keys, or ask the instructor for a demo key
 ```bash
-# .env
-OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_API_KEY=your-openai-key
+LANGSMITH_API_KEY=your-langsmith-key
+LANGSMITH_TRACING=true
 ```
 
 ## Step 1: Understanding RAG Components
