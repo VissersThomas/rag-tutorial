@@ -1,8 +1,10 @@
-# Part 1: Building a simple RAG Application from Scratch
+# RAG Tutorial for LLM Security Workshop
+
+## Part 1: Building a simple RAG Application from Scratch
 
 This tutorial will guide you through building a complete Retrieval-Augmented Generation (RAG) application step by step. By the end, you'll understand how RAG works in practice and have a working application.
 
-## What We'll Build
+### What We'll Build
 
 A web-based chat application that can answer questions about PDF documents using:
 - **Document Processing**: Load and chunk PDF files
@@ -11,15 +13,15 @@ A web-based chat application that can answer questions about PDF documents using
 - **Generation**: Use LLM to generate answers based on retrieved context
 - **Web Interface**: Simple chat interface to interact with the system
 
-## Prerequisites
+### Prerequisites
 
 - Python 3.8+
 - OpenAI API key
 - Basic understanding of Python and web development
 
-## Step 0: Project Setup
+### Step 0: Project Setup
 
-### Clone the skeleton repository:
+#### Clone the skeleton repository:
 ```bash
 git clone https://github.com/VissersThomas/rag-tutorial.git
 cd rag-tutorial
@@ -39,14 +41,14 @@ The repository includes:
     - `requirements.txt` with all python dependencies,
     - `.env` template
 
-### Create and activate virtual environment:
+#### Create and activate virtual environment:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Environment setup (`.env` file):
+#### Environment setup (`.env` file):
 
 Add your own keys, or ask the instructor for a demo key
 ```bash
@@ -55,14 +57,14 @@ LANGSMITH_API_KEY=your-langsmith-key
 LANGSMITH_TRACING=true
 ```
 
-## Step 1: Understanding RAG Components
+### Step 1: Understanding RAG Components
 
 Before coding, let's understand what we're building:
 
 1. **Documents** → **Chunks** → **Embeddings** → **Vector Store**
 2. **User Question** → **Retrieve Similar Chunks** → **LLM + Context** → **Answer**
 
-## Step 2: Document Loading (`kb_loader.py`)
+### Step 2: Document Loading (`kb_loader.py`)
 
 Let's start by loading PDF documents into our knowledge base:
 
@@ -102,7 +104,7 @@ def load_pdf_files(data_dir="./data"):
 - Create LangChain `Document` objects with content + metadata
 - Metadata helps us track which document and page the text came from
 
-## Step 3: Text Chunking (`kb_loader.py`)
+### Step 3: Text Chunking (`kb_loader.py`)
 
 Large documents need to be split into smaller chunks for better retrieval:
 
@@ -133,7 +135,7 @@ def split_documents(docs):
 - LLM context windows have limits
 - Retrieval is more precise with smaller, relevant chunks
 
-## Step 4: Vector Storage (`vector_store.py`)
+### Step 4: Vector Storage (`vector_store.py`)
 
 Now let's create embeddings and store them in a vector database:
 
@@ -174,7 +176,7 @@ def create_vector_db(texts, embeddings=None, collection_name="chroma"):
 - Vectors are stored in Chroma database for fast similarity search
 - `text-embedding-3-small` creates 1536-dimensional vectors
 
-## Step 5: RAG Chain (`rag_chain.py`)
+### Step 5: RAG Chain (`rag_chain.py`)
 
 This is where the magic happens - combining retrieval with generation:
 
@@ -260,12 +262,21 @@ def init_rag():
 5. **Parser**: Extracts clean string from model response
 6. **Wrapper**: `{"answer": "OWASP is..."}` - structured output for API
 
-## Step 6: Web Interface
+### Step 6: Web Interface
 
 The web interface is already provided in the `static/index.html` file from the skeleton repository.
 Feel free to make any changes to your liking.
 
-## Step 7: FastAPI Backend (`app.py`)
+### Step 7: FastAPI Backend (`app.py`)
+
+Now we'll create a web server using FastAPI - a modern Python web framework that automatically generates API documentation and handles HTTP requests. Our server will:
+
+- **Serve the static HTML chat interface** at the root URL (`/`)
+- **Expose a REST API endpoint** (`/ask`) that accepts questions and returns RAG-generated answers
+- **Provide a health check endpoint** (`/health`) to verify the system is working
+- **Handle static files** (CSS, JavaScript) for the web interface
+
+The web interface will make HTTP POST requests to our `/ask` endpoint, but you can also test the API directly using tools like curl or Postman.
 
 Finally, let's create the web server:
 
@@ -324,20 +335,35 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8999)
 ```
 
-## Step 8: Running the Application
+### Step 8: Running the Application
 
 1. **Run the application**:
    ```bash
    python app.py
    ```
-2. **Open your browser** to `http://localhost:8999`
-3. **Ask questions** about your documents!
 
-# Part 2: Adding Input Guardrails
+2. **Test with the web interface**:
+   - Open your browser to `http://localhost:8999`
+   - Ask questions about your documents in the chat interface!
 
-To protect against inappropriate inputs, we can add NeMo Guardrails using LCEL:
+3. **Test the API directly with cURL**:
+   ```bash
+   curl -X POST http://localhost:8999/ask \
+     -H "Content-Type: application/json" \
+     -d '{"question": "What are some AI Red Teaming strategies?"}'
+   ```
 
-## Step 1: Create guardrails configuration (`config/config.yml`)
+## Part 2: Adding Input Guardrails
+
+To protect against inappropriate inputs, we'll add NeMo Guardrails - a toolkit by NVIDIA that helps setting these up. We'll:
+
+- **Create a configuration file** (`config.yml`) that defines our guardrail policies (what types of inputs to block)
+- **Integrate guardrails into our RAG chain** using LangChain Expression Language (LCEL)
+- **Filter inputs before they reach the LLM** - blocked inputs get a standard rejection message, safe inputs pass through normally
+
+The guardrails will use the same LLM (GPT-4.1-mini) to evaluate whether user inputs comply with our safety policies before allowing them to proceed to document retrieval and answer generation.
+
+### Step 1: Create guardrails configuration (`config/config.yml`)
 
 ```yaml
 models:
@@ -367,7 +393,7 @@ prompts:
       Answer:
 ```
 
-## Step 2: Update the RAG chain (`rag_chain.py`)
+### Step 2: Update the RAG chain (`rag_chain.py`)
 
 Add the guardrails imports and modify the `init_rag()` function:
 
@@ -396,11 +422,11 @@ def init_rag():
 - If input is safe, passes through to RAG chain normally
 - Uses the same LLM to evaluate input safety
 
-# Part 3: Use a Remote Vector Store
+## Part 3: Use a Remote Vector Store
 
 For production deployments (and our upcoming game), you might want to use a remote, pre-populated vector database instead of loading documents locally. Here's how to connect to a remote Milvus instance:
 
-## Step 1: Create remote vector store connector (`remote_vector_store.py`)
+### Step 1: Create remote vector store connector (`remote_vector_store.py`)
 ```python
 import logging
 import os
@@ -446,7 +472,13 @@ def connect_to_vector_db(embeddings=None):
     return db
 ```
 
-## Step 2: Modify RAG chain to use remote vector store
+### Step 2: Modify RAG chain to use remote vector store
+
+Now we'll modify our RAG chain to connect to the remote vector database instead of building a local one. This means:
+
+- **Skip the document loading and processing steps** - the remote database is already populated with embeddings
+- **Replace the local vector store creation** with a connection to the remote Milvus instance
+- **Keep everything else the same** - retriever, LLM, prompt, and chain logic remain unchanged
 
 Update your `rag_chain.py` file:
 
