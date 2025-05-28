@@ -26,7 +26,7 @@ cd rag-tutorial
 ```
 
 The repository includes:
-- **Empty Python file that we'll code up in this tutorial**:
+- **Empty Python files that we'll code up in this tutorial**:
     - `app.py`,
     - `kb_loader.py`,
     - `vector_store.py`,
@@ -41,7 +41,7 @@ The repository includes:
 
 ### Create and activate virtual environment:
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
