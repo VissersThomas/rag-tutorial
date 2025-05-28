@@ -1,0 +1,16 @@
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+langchainhub
+openai
+python-dotenv
+pypdf
+chromadb
+pymilvus
+langchain-milvus
+fastapi
+uvicorn
+tiktoken
+langsmith
+nemoguardrails
