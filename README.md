@@ -26,10 +26,18 @@ cd rag-tutorial
 ```
 
 The repository includes:
-- **Empty Python file that we'll code up in this tutorial**: `app.py`, `kb_loader.py`, `vector_store.py`, `rag_chain.py`
-- **Pre-populated `data/` folder**: Sample PDF documents that serve as our RAG knowledge base in this tutorial
-- **Pre-populated `static/` folder**: Basic HTML interface for the chat application
-- **Configuration files**: `requirements.txt` with all dependencies, `.env` template
+- **Empty Python file that we'll code up in this tutorial**:
+    - `app.py`,
+    - `kb_loader.py`,
+    - `vector_store.py`,
+    - `rag_chain.py`
+- **Pre-populated `data/` folder**:
+    - Sample PDF documents that serve as our RAG knowledge base in this tutorial
+- **Pre-populated `static/` folder**:
+    - Basic HTML interface for the chat application
+- **Configuration files**:
+    - `requirements.txt` with all python dependencies,
+    - `.env` template
 
 ### Create and activate virtual environment:
 ```bash
