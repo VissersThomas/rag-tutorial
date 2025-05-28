@@ -102,7 +102,7 @@ def load_pdf_files(data_dir="./data"):
 - Create LangChain `Document` objects with content + metadata
 - Metadata helps us track which document and page the text came from
 
-## Step 3: Text Chunking
+## Step 3: Text Chunking (`kb_loader.py`)
 
 Large documents need to be split into smaller chunks for better retrieval:
 
