@@ -326,14 +326,12 @@ if __name__ == "__main__":
 
 ## Step 8: Running the Application
 
-1. **Add PDF documents** to the `data/` folder
-2. **Set your OpenAI API key** in `.env`
-3. **Run the application**:
+1. **Run the application**:
    ```bash
    python app.py
    ```
-4. **Open your browser** to `http://localhost:8999`
-5. **Ask questions** about your documents!
+2. **Open your browser** to `http://localhost:8999`
+3. **Ask questions** about your documents!
 
 # Part 2: Adding Input Guardrails
 
