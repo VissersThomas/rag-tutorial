@@ -6,6 +6,8 @@ This tutorial will guide you through building a complete Retrieval-Augmented Gen
 
 ### What We'll Build
 
+![image](https://github.com/user-attachments/assets/8589f446-e4c8-4157-82ed-9f8397948068)
+
 A web-based chat application that can answer questions about PDF documents using:
 - **Document Processing**: Load and chunk PDF files
 - **Vector Storage**: Store document embeddings for semantic search
