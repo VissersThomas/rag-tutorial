@@ -17,7 +17,8 @@ A web-based chat application that can answer questions about PDF documents using
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.12+
+- Docker
 - OpenAI API key
 - Basic understanding of Python and web development
 
@@ -44,6 +45,7 @@ The repository includes:
     - `.env` template
 
 #### Create and activate virtual environment:
+This is optional for when you want to run this locally. Alternatively, we will show you how to run it with Docker instead.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
@@ -343,6 +345,10 @@ if __name__ == "__main__":
 1. **Run the application**:
    ```bash
    python app.py
+   ```
+or alternatively, run the application in a Docker container
+   ```bash
+   docker build -t rag-tutorial . && docker run -p 8999:8999 --env-file .env rag-tutorial
    ```
 
 2. **Test with the web interface**:
