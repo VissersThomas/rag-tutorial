@@ -346,7 +346,7 @@ if __name__ == "__main__":
    ```bash
    python app.py
    ```
-or alternatively, run the application in a Docker container
+   or alternatively, run the application in a Docker container
    ```bash
    docker build -t rag-tutorial . && docker run -p 8999:8999 --env-file .env rag-tutorial
    ```
@@ -434,11 +434,15 @@ def init_rag():
 ### Step 3: Test your guardrails!
 
 1. **Restart the application**:
+   Local app restart or Docker!
    ```bash
    python app.py
    ```
+   ```bash
+   docker build -t rag-tutorial . && docker run -p 8999:8999 --env-file .env rag-tutorial
+   ```
 
-2. **Test with an impersonation prompt**:
+3. **Test with an impersonation prompt**:
    ```bash
    curl -X POST http://localhost:8999/ask \
      -H "Content-Type: application/json" \
