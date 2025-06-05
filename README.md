@@ -294,8 +294,7 @@ from dotenv import load_dotenv
 
 from rag_chain import init_rag
 
-# Load environment variables, among them langsmith api key
-# Enables lang smith tracing
+# Load environment variables, among them the API keys
 load_dotenv()
 
 # Initialize RAG chain once at startup
