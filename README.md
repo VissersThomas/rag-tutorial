@@ -366,7 +366,7 @@ if __name__ == "__main__":
 
 To protect against inappropriate inputs, we'll add NeMo Guardrails - a toolkit by NVIDIA that helps setting these up. We'll:
 
-- **Create a configuration file** (`config.yml`) that defines our guardrail policies (what types of inputs to block)
+- **Create a configuration file** (`config.yml`) inside a new folder called `config` that defines our guardrail policies (what types of inputs to block)
 - **Integrate guardrails into our RAG chain** using LangChain Expression Language (LCEL)
 - **Filter inputs before they reach the LLM** - blocked inputs get a standard rejection message, safe inputs pass through normally
 
