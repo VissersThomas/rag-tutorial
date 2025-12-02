@@ -461,16 +461,16 @@ import os
 from langchain_openai import OpenAIEmbeddings
 from langchain_milvus import Milvus
 
-
 def connect_to_vector_db(embeddings=None):
     """Connect to existing, pre-populated Milvus vector database"""
 
-    # Hardcoded Milvus connection details - update these for your deployment
-    MILVUS_HOST = "your-milvus-host.com"
-    MILVUS_PORT = "19530"
-    MILVUS_USER = "user_{your-id}"
-    MILVUS_PASSWORD = "pass_{your-id}"
-    COLLECTION_NAME = "kb_{your-id}"
+    # Build connection args
+    # Get configuration from environment variables
+    MILVUS_HOST = os.getenv("MILVUS_HOST", "localhost")
+    MILVUS_PORT = os.getenv("MILVUS_PORT", "19530")
+    MILVUS_USER = os.getenv("MILVUS_USER")
+    MILVUS_PASSWORD = os.getenv("MILVUS_PASSWORD")
+    COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
     # Select embeddings (must match what was used to populate the DB)
     if not embeddings:
@@ -479,8 +479,7 @@ def connect_to_vector_db(embeddings=None):
 
     # Build connection args
     connection_args = {
-        "host": MILVUS_HOST,
-        "port": MILVUS_PORT,
+        "uri": MILVUS_HOST + ":" + MILVUS_PORT,
         "user": MILVUS_USER,
         "password": MILVUS_PASSWORD
     }
@@ -527,11 +526,10 @@ def init_rag():
     # vs = create_vector_db(texts)
 
     # Now connect to existing remote vector store instead
-    vs = connect_to_remote_vector_db()
+    vs = connect_to_vector_db()
     # Rest of the chain remains the same...
     retriever = vs.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 
-    
 ```
 
 **⚠️ Important notes:**
